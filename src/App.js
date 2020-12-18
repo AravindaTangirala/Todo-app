@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useState } from "react";
+import "./App.css";
+import Todo from "./components/Todo";
+import { Button } from "@material-ui/core";
+import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import DeleteIcon from "@material-ui/icons/Delete";
 function App() {
+  const [input, setInput] = useState("");
+  const [todo, setTodo] = useState([]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setTodo([...todo, input]);
+    setInput("");
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h1>Todo List</h1>
+
+      <input
+        type="text"
+        value={input}
+        placeholder="todo list item"
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <AddCircleOutlineIcon disabled={!input} onClick={handleSubmit} />
+      {todo.map((list) => (
+        <Todo title={list} />
+      ))}
     </div>
   );
 }
