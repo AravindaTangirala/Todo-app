@@ -3,16 +3,20 @@ import "./App.css";
 import Todo from "./components/Todo";
 import { Button } from "@material-ui/core";
 import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
-import DeleteIcon from "@material-ui/icons/Delete";
+
 import db from "./firebase";
 import firebase from "firebase";
 function App() {
   const [input, setInput] = useState("");
   const [todo, setTodo] = useState([]);
   useEffect(() => {
-    db.collection("todo").onSnapshot((snapshot) => {
-      setTodo(snapshot.docs.map((doc) => doc.data().title));
-    });
+    db.collection("todo")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        setTodo(
+          snapshot.docs.map((doc) => ({ id: doc.id, title: doc.data().title }))
+        );
+      });
   }, []);
   const addTodo = (e) => {
     e.preventDefault();
